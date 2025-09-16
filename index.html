@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewertungsformular - IWS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Roboto', 'Segoe UI', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #1F2937;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 24px 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0D3F8A;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0D3F8A;
+            text-align: center;
+            letter-spacing: 0.05em;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #E6EEF7;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0D3F8A;
+            margin-bottom: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .col-span-12 {
+            grid-column: span 12;
+        }
+
+        .col-span-6 {
+            grid-column: span 12;
+        }
+
+        @media (min-width: 768px) {
+            .col-span-6 {
+                grid-column: span 6;
+            }
+            .main-title {
+                font-size: 3rem;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #0D3F8A;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E6EEF7;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: #ffffff;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0D3F8A;
+            box-shadow: 0 0 0 3px rgba(13, 63, 138, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #6B7280;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #6B7280;
+            margin-top: 4px;
+        }
+
+        .rating-group {
+            margin-bottom: 24px;
+        }
+
+        .rating-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .rating-pill {
+            display: none;
+        }
+
+        .rating-pill-label {
+            display: inline-block;
+            padding: 12px 20px;
+            border: 2px solid #E6EEF7;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            color: #1F2937;
+            background-color: #ffffff;
+        }
+
+        .rating-pill:checked + .rating-pill-label {
+            border-color: #0D3F8A;
+            background-color: rgba(13, 63, 138, 0.1);
+            color: #0D3F8A;
+        }
+
+        .rating-pill-label:hover {
+            border-color: #0D3F8A;
+        }
+
+        .smiley {
+            color: #0D3F8A !important;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .error-text {
+            color: #DC2626;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-text.show {
+            display: block;
+        }
+
+        .footer-note {
+            color: #6B7280;
+            font-size: 0.85rem;
+            margin-top: 24px;
+            text-align: left;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 32px;
+        }
+
+        .btn-primary {
+            background-color: #0D3F8A;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0a2f6b;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background-color: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+
+        .message.error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        .message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="company-name">IWS GmbH</div>
+        
+        <h1 class="main-title">Bewertungsformular</h1>
+
+        <div class="card">
+            <h2 class="card-title">Stammdaten sind bereits ausgefüllt</h2>
+            
+            <form id="bewertungsform">
+                <div class="grid">
+                    <div class="col-span-6">
+                        <div class="form-group">
+                            <label for="projektnummer" class="form-label">Projektnummer</label>
+                            <input type="text" id="projektnummer" name="projektnummer" class="form-input" placeholder="z. B. 24-1023">
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-6">
+                        <div class="form-group">
+                            <label for="angebotsnummer" class="form-label">Angebotsnummer</label>
+                            <input type="number" id="angebotsnummer" name="angebotsnummer" class="form-input" placeholder="z. B. 5012">
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-6">
+                        <div class="form-group">
+                            <label for="dealname" class="form-label">Dealname</label>
+                            <input type="text" id="dealname" name="dealname" class="form-input" placeholder="z. B. UL508A – Linie A">
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-6">
+                        <div class="form-group">
+                            <label for="firma" class="form-label">Firma</label>
+                            <input type="text" id="firma" name="firma" class="form-input" placeholder="z. B. Musterfirma GmbH">
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-6">
+                        <div class="form-group">
+                            <label for="phase" class="form-label">Phase</label>
+                            <input type="text" id="phase" name="phase" class="form-input" placeholder="z. B. Angebot / Auftrag / Lieferung">
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-6">
+                        <!-- E-Mail ist optional, wird bei Angabe gespeichert -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">E-Mail</label>
+                            <input type="email" id="email" name="email" class="form-input" placeholder="name@firma.de">
+                            <div class="help-text"><strong>Freiwillige Angabe - Daten werden gespeichert</strong></div>
+                            <div class="error-text" id="email-error">Bitte geben Sie eine gültige E-Mail-Adresse ein.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bewertung 1/2/3 entspricht Schlecht/Neutral/Gut -->
+                <div class="rating-group">
+                    <label class="form-label">Bewertung <span style="color: #DC2626;">*</span></label>
+                    
+                    <div class="rating-pills">
+                        <input type="radio" id="rating-1" name="bewertung" value="1" class="rating-pill">
+                        <label for="rating-1" class="rating-pill-label"><span class="smiley">:(</span> – Schlecht</label>
+                        
+                        <input type="radio" id="rating-2" name="bewertung" value="2" class="rating-pill">
+                        <label for="rating-2" class="rating-pill-label"><span class="smiley">:|</span> – Neutral</label>
+                        
+                        <input type="radio" id="rating-3" name="bewertung" value="3" class="rating-pill">
+                        <label for="rating-3" class="rating-pill-label"><span class="smiley">:)</span> – Gut</label>
+                    </div>
+                    <div class="error-text" id="rating-error">Bitte wählen Sie eine Bewertung aus.</div>
+                </div>
+
+                <!-- In "Bemerkung" dürfen positive und negative Punkte notiert werden -->
+                <div class="form-group">
+                    <label for="bemerkung" class="form-label">Bemerkung</label>
+                    <textarea id="bemerkung" name="bemerkung" class="form-input form-textarea" placeholder="z. B. Sehr gute Qualität, aber Lieferzeit zu lang."></textarea>
+                    <div class="help-text">Positive wie negative Punkte</div>
+                </div>
+
+                <div class="footer-note">
+                    Mit * gekennzeichnete Felder sind Pflichtangaben.
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn-primary" id="submit-btn">Senden</button>
+                </div>
+
+                <div class="message" id="message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Prefill-Funktionalität
+        function prefillForm() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const fields = ['projektnummer', 'angebotsnummer', 'dealname', 'firma', 'phase'];
+            
+            fields.forEach(field => {
+                const input = document.getElementById(field);
+                if (input) {
+                    // Prüfe zuerst window.PREFILL
+                    if (window.PREFILL && window.PREFILL[field] !== undefined) {
+                        input.value = window.PREFILL[field];
+                    }
+                    // Falls kein PREFILL-Wert vorhanden, nutze URL-Parameter
+                    else if (urlParams.has(field)) {
+                        input.value = urlParams.get(field);
+                    }
+                }
+            });
+        }
+
+        // E-Mail-Validierung
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Formular-Validierung
+        function validateForm() {
+            let isValid = true;
+
+            // Bewertung prüfen (Pflichtfeld)
+            const ratingChecked = document.querySelector('input[name="bewertung"]:checked');
+            const ratingError = document.getElementById('rating-error');
+            
+            if (!ratingChecked) {
+                ratingError.classList.add('show');
+                isValid = false;
+            } else {
+                ratingError.classList.remove('show');
+            }
+
+            // E-Mail prüfen (optional, aber wenn befüllt, dann validieren)
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('email-error');
+            
+            if (emailInput.value.trim() !== '' && !validateEmail(emailInput.value.trim())) {
+                emailError.classList.add('show');
+                isValid = false;
+            } else {
+                emailError.classList.remove('show');
+            }
+
+            return isValid;
+        }
+
+        // Nachricht anzeigen
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type} show`;
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        // Formular zurücksetzen
+        function resetForm() {
+            document.getElementById('bewertungsform').reset();
+            document.querySelectorAll('.error-text').forEach(el => el.classList.remove('show'));
+        }
+
+        // Formular-Submit
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            const messageDiv = document.getElementById('message');
+            
+            // Button deaktivieren
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wird gesendet...';
+            messageDiv.classList.remove('show');
+
+            try {
+                // Daten sammeln
+                const formData = new FormData(event.target);
+                const rating = document.querySelector('input[name="bewertung"]:checked');
+                
+                const payload = {
+                    Projektnummer: formData.get('projektnummer') || null,
+                    Angebotsnummer: formData.get('angebotsnummer') ? parseInt(formData.get('angebotsnummer')) : null,
+                    dealname: formData.get('dealname') || null,
+                    firma: formData.get('firma') || null,
+                    Phase: formData.get('phase') || null,
+                    Email: formData.get('email') || null,
+                    Bewertung: rating ? parseInt(rating.value) : null,
+                    Bemerkung: formData.get('bemerkung') || null,
+                    ts_client: new Date().toISOString()
+                };
+
+                // An Webhook senden
+                const response = await fetch('https://n8n.iws-gmbh.net/webhook/Bewertung_abgeschlossen', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    resetForm();
+                    showMessage('Danke! Ihre Bewertung wurde übermittelt.', 'success');
+                } else {
+                    throw new Error('Server error');
+                }
+
+            } catch (error) {
+                console.error('Fehler beim Senden:', error);
+                showMessage('Fehler beim Senden. Bitte später erneut versuchen.', 'error');
+            } finally {
+                // Button reaktivieren
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Senden';
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            prefillForm();
+            
+            document.getElementById('bewertungsform').addEventListener('submit', handleSubmit);
+            
+            // Real-time Validierung für E-Mail
+            const emailInput = document.getElementById('email');
+            emailInput.addEventListener('blur', function() {
+                const emailError = document.getElementById('email-error');
+                if (this.value.trim() !== '' && !validateEmail(this.value.trim())) {
+                    emailError.classList.add('show');
+                } else {
+                    emailError.classList.remove('show');
+                }
+            });
+
+            // Real-time Validierung für Bewertung
+            document.querySelectorAll('input[name="bewertung"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.getElementById('rating-error').classList.remove('show');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
